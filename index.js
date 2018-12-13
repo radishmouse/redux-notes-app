@@ -1,6 +1,8 @@
 const {
     store,
-    updateContent
+    updateNote,
+    addNote,
+    deleteNote
 } = require('./store');
 
 // ================================================
@@ -20,9 +22,14 @@ store.subscribe(() => {
 // const theAction = updateContent('buy some milk');
 // console.log(theAction);
 
-store.dispatch(updateContent('buy some milk'));
+// store.dispatch(addNote('buy some milk'));
 // store.dispatch({ type: 'ACTION_UPDATE', content: 'buy some milk' });
-store.dispatch(updateContent('drink the milk'));
-store.dispatch(updateContent('buy some cookies'));
-store.dispatch(updateContent('eat all the cookies'));
-store.dispatch(updateContent('feel terrible'));
+// store.dispatch(addNote('drink the milk'));
+// store.dispatch(addNote('buy some cookies'));
+store.dispatch(addNote('eat all the cookies'));
+store.dispatch(addNote('feel terrible'));
+
+const idOfLastOne = store.getState().notes[store.getState().notes.length - 1].id;
+store.dispatch(updateNote(idOfLastOne, 'go to lunch'));
+
+store.dispatch(deleteNote(idOfLastOne));
