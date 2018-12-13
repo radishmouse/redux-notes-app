@@ -11,8 +11,9 @@ const {
 // and perform changes to the state
 
 store.subscribe(() => {
+    const currentState = store.getState();
     console.log('-----------');
-    console.log(store.getState());
+    console.log(currentState);
     console.log('-----------');
 });
 

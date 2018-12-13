@@ -78,8 +78,8 @@ function createJankStore(reducer) {
     return store;
 }
 
-// const store = createStore(note);
-const store = createJankStore(note);
+const store = createStore(note);
+// const store = createJankStore(note);
 
 
 // #5 and a half - export the store and action creators
