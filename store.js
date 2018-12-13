@@ -36,6 +36,9 @@ const updateContent = (content) => {
 // #4 - Write a reducer function that accepts state and an action
 // and returns the next version of the state
 const note = (state=defaultState, action) => {
+    if (!action) {
+        return state;
+    }
     switch(action.type) {
         case ACTION_UPDATE.type:
             return {
@@ -51,7 +54,33 @@ const note = (state=defaultState, action) => {
 
 
 // #5 - Create a store that uses your reducer
-const store = createStore(note);
+
+// Chris' janky handrolled redux store:
+function createJankStore(reducer) {
+    let state = reducer(); // set up the initial state
+    const functionsToCallWhenChangeHappens = []; // keep track of functions to notify
+    
+    const store = {}; // a redux store is just an object
+    store.getState = () => { // it has a .getState method
+        return {...state}  // that returns a *copy* of the state
+    };
+
+    store.subscribe = (fn) => { // you can pass it functions to call when there is a change to state
+        functionsToCallWhenChangeHappens.push(fn);
+    };
+
+    store.dispatch = (action) => { // it has a dispatch function
+        state = reducer(state, action); // that calculates the next version state
+        functionsToCallWhenChangeHappens.forEach(fn => { // and then notifies any subscribers
+            fn();
+        });
+    };
+    return store;
+}
+
+// const store = createStore(note);
+const store = createJankStore(note);
+
 
 // #5 and a half - export the store and action creators
 

@@ -1,4 +1,7 @@
-const store = require('./store');
+const {
+    store,
+    updateContent
+} = require('./store');
 
 // ================================================
 // APP
@@ -6,3 +9,19 @@ const store = require('./store');
 
 // #6 - set up subscriptions for notifications of when the state changes
 // and perform changes to the state
+
+store.subscribe(() => {
+    console.log('-----------');
+    console.log(store.getState());
+    console.log('-----------');
+});
+
+// const theAction = updateContent('buy some milk');
+// console.log(theAction);
+
+store.dispatch(updateContent('buy some milk'));
+// store.dispatch({ type: 'ACTION_UPDATE', content: 'buy some milk' });
+store.dispatch(updateContent('drink the milk'));
+store.dispatch(updateContent('buy some cookies'));
+store.dispatch(updateContent('eat all the cookies'));
+store.dispatch(updateContent('feel terrible'));
