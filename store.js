@@ -38,7 +38,11 @@ const updateContent = (content) => {
 const note = (state=defaultState, action) => {
     switch(action.type) {
         case ACTION_UPDATE.type:
-            
+            return {
+                note: {
+                    content: action.content
+                }
+            }   
 
         default:
             return state;
@@ -47,4 +51,11 @@ const note = (state=defaultState, action) => {
 
 
 // #5 - Create a store that uses your reducer
+const store = createStore(note);
 
+// #5 and a half - export the store and action creators
+
+module.exports = {
+    store,
+    updateContent
+};
