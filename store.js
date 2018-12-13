@@ -1,6 +1,6 @@
 // console.log('yay redux');
 const { createStore } = require('redux');
-
+const uuid = require('uuid/v4');
 
 // ================================================
 // SETUP
@@ -8,27 +8,58 @@ const { createStore } = require('redux');
 
 // #1 - Describe the state
 const defaultState = {
-    note: {
-        content: ''
-    }
+    notes: [
+        // {
+        //     id: uuid(),
+        //     content: ''
+        // }
+    ]
 }
 
 // #2 - List out all the kinds/types of changes you could make to state
 /*
 - UPDATE_CONTENT    
+- ADD_NOTE
+- DELETE_NOTE
 */
 const ACTION_UPDATE = {
     type: 'ACTION_UPDATE',
-    // content: '??????'
+    // content: '??????',
+    // id: '???????'
+};
+
+const ACTION_ADD = {
+    type: 'ACTION_ADD',
+    // content: '?????'
+};
+
+const ACTION_DEL = {
+    type: 'ACTION_DEL',
+    // id: '??????'
 }
 
 // #3 - Write action creator functions
 // These are functions that use/return those descriptions
 // of changes you can make to state.
-const updateContent = (content) => {
+const updateContent = (id, content) => {
     return {
         ...ACTION_UPDATE,
+        id,
         content
+    };
+};
+
+const addNote = (content) => {
+    return {
+        ...ACTION_ADD,
+        content
+    };
+};
+
+const deleteNote = (id) => {
+    return {
+        ...ACTION_DEL,
+        id
     }
 }
 
@@ -42,11 +73,41 @@ const note = (state=defaultState, action) => {
     switch(action.type) {
         case ACTION_UPDATE.type:
             return {
-                note: {
-                    content: action.content
-                }
-            }   
+                notes: state.notes.map(note => {
+                    if (note.id === action.id) {
+                        return {
+                            ...note,
+                            // alternative to spread operator: just copy all the existing keys 
+                            // id: note.id,
+                            // content: note.content,                            
 
+                            // immediately overwrite the content with what
+                            // came in through the action
+                            content: action.content
+                        }
+                    } else {
+                        // This is not the one to update.
+                        // Just return the original
+                        // return note;
+
+                        // Anal retentive version: create a new object,
+                        // and sprinkle in all the key/value pairs
+                        return {
+                            ...note
+                        };
+                    }
+                })
+            }   
+        case ACTION_ADD.type:
+            return {
+                notes: [
+                    ...state.notes,
+                    {
+                        id: uuid(),
+                        content: action.content
+                    }
+                ]
+            }
         default:
             return state;
     }
